@@ -28,15 +28,15 @@
     function Geocoding(map, locations) {
 
       //var locations = [
-        //'Estácio, Rio de Janeiro',
-        //'Oswaldo Cruz, Rio de Janeiro',
-        //'Engenho da Rainha, Rio de Janeiro',
-        //'Guadalupe, Rio de Janeiro',
-        //'Lins de Vasconclos, Rio de Janeiro',
-        //'Gogó da Ema, Rio de Janeiro',
-        //'Ilha do Fundão, Rio de Janeiro',
-        //'Morro dos Macacos, Rio de Janeiro',
-        //'Freguesia, Rio de Janeiro'
+      //'Estácio, Rio de Janeiro',
+      //'Oswaldo Cruz, Rio de Janeiro',
+      //'Engenho da Rainha, Rio de Janeiro',
+      //'Guadalupe, Rio de Janeiro',
+      //'Lins de Vasconclos, Rio de Janeiro',
+      //'Gogó da Ema, Rio de Janeiro',
+      //'Ilha do Fundão, Rio de Janeiro',
+      //'Morro dos Macacos, Rio de Janeiro',
+      //'Freguesia, Rio de Janeiro'
       //];
 
       var geocoder = new google.maps.Geocoder();
@@ -44,6 +44,7 @@
       var x = 0
       for (count = 0; count < locations.length; count++) {
         endereco = locations[x];
+        console.log(endereco)
         geocoder.geocode({ address: endereco }, function (results, status) {
           if (status == 'OK') {
             map.setCenter(results[0].geometry.location);
@@ -82,7 +83,8 @@
 
   </script>
   <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=SUA-API-AQUI&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBy5sPPL58np_vCYP9laO4QbJdH3WT71tc&callback=initMap">
     </script>
 </body>
+
 </html>
