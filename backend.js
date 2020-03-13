@@ -1,15 +1,13 @@
 var express = require('express');
 var app = express();
-const bodyParser = require('body-parser')
-const urlencodedParser = bodyParser.urlencoded({ extended: true })
 app.engine('html', require('ejs').renderFile)
 
 //conectando o banco
 const mongo = require('mongodb').MongoClient
-const dbUrl = 'mongodb://localhost/mydb'
+const dbUrl = 'mongodb://localhost/ufrj'
 mongo.connect(dbUrl, function (err, client) {
     if (err) return console.log(err)
-    db = client.db('mydb').collection("covid19")
+    db = client.db('ufrj').collection("covid19")
 
     app.listen(3000, function () {
         console.log('Escutando porta 3000:');
@@ -20,16 +18,14 @@ app.get('/', function (req, res) {
     res.sendFile(__dirname + '/formulario.html');
 });
 
-app.post('/bubu', function (req, res) {
+app.post('/cadastrar', function (req, res) {
     obj = req.query.json
-    console.log(obj)
     obj = JSON.parse(obj.toString())
-    console.log(obj)
     db.insertOne(obj)
     res.send('200')
 })
 
-app.get('/enderecos', function (req, res) {
+app.get('/ocorrencias/data', function (req, res) {
     db.find({}, { projection: { endereco: 1, _id: 0 } }).toArray(function (err, result) {
       if (err) throw err;
       var cont
@@ -42,10 +38,8 @@ app.get('/enderecos', function (req, res) {
       })
       res.json({ data: enderecos });
     });
-  
-  
   });
   
-  app.get('/mapa', function (req, res) {
+  app.get('/ocorrencias', function (req, res) {
     res.sendFile(__dirname + '/Geocoding.html')
   })

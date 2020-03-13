@@ -6,13 +6,10 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <style>
-    /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
+
     #map {
       height: 100%;
     }
-
-    /* Optional: Makes the sample page fill the window. */
     html,
     body {
       height: 100%;
@@ -27,24 +24,11 @@
   <script>
     function Geocoding(map, locations) {
 
-      //var locations = [
-      //'Estácio, Rio de Janeiro',
-      //'Oswaldo Cruz, Rio de Janeiro',
-      //'Engenho da Rainha, Rio de Janeiro',
-      //'Guadalupe, Rio de Janeiro',
-      //'Lins de Vasconclos, Rio de Janeiro',
-      //'Gogó da Ema, Rio de Janeiro',
-      //'Ilha do Fundão, Rio de Janeiro',
-      //'Morro dos Macacos, Rio de Janeiro',
-      //'Freguesia, Rio de Janeiro'
-      //];
-
       var geocoder = new google.maps.Geocoder();
       var marker, count, endereco;
       var x = 0
       for (count = 0; count < locations.length; count++) {
         endereco = locations[x];
-        console.log(endereco)
         geocoder.geocode({ address: endereco }, function (results, status) {
           if (status == 'OK') {
             map.setCenter(results[0].geometry.location);
@@ -63,10 +47,9 @@
     function initMap() {
 
       var xhr = new XMLHttpRequest();
-      var url = "http://localhost:3000/enderecos"
+      var url = 'http://'+window.location.host+'/ocorrencias/data'
       xhr.open("GET", url, true)
       xhr.onload = function (e) {
-        console.log(JSON.parse(xhr.response).data)
         var enderecos = JSON.parse(xhr.response).data
         var center = { lat: -22.8576, lng: -43.2004 };
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -76,9 +59,6 @@
         Geocoding(map, enderecos);
       }
       xhr.send();
-      //window.location.href='http://localhost:3000/'
-
-
     }
 
   </script>

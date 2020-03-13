@@ -7,41 +7,49 @@
   <link src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></link>
 
   <script>
-          //funcao q monta a requisicao
+   var json={}
 
-          json={}
-          function montarReq(obj , checkbox){
+   function verificaPreenchimmento(json){
+        if(json.hasOwnProperty('datanotificacao') && json.hasOwnProperty('cartaosus') && json.hasOwnProperty('cpf') && json.hasOwnProperty('nomepaciente') && json.hasOwnProperty('sexo') && json.hasOwnProperty('datanascimento') && json.hasOwnProperty('idade') && json.hasOwnProperty('nomemae') && json.hasOwnProperty('nacionalidade') && json.hasOwnProperty('paisresidencia') && json.hasOwnProperty('endereco') && json.hasOwnProperty('cep') && json.hasOwnProperty('dataprimeirosintoma') && json.hasOwnProperty('sintomasapre') && json.hasOwnProperty('sinaisclinicos') && json.hasOwnProperty('morbidade') && json.hasOwnProperty('hospitalizado') && json.hasOwnProperty('SituacaoSaude') && json.hasOwnProperty('coleta') && json.hasOwnProperty('historicoViagem') && json.hasOwnProperty('contatoSuspeito') && json.hasOwnProperty('contatoConfirmado') && json.hasOwnProperty('unidaDeSaude') && json.hasOwnProperty('Ocupacao') && json.hasOwnProperty('contatoAnimal') && json.hasOwnProperty('origemnotificacao') && json.hasOwnProperty('estadonotificacao') && json.hasOwnProperty('municipionotificacao') && json.hasOwnProperty('nomenotificador') && json.hasOwnProperty('profocup') && json.hasOwnProperty('telefone') && json.hasOwnProperty('email')){
+           return true
+        }
+        else{
+           return false 
+        }
+  }
 
-             //typeof 
-               if(checkbox){ 
-                  if (!json[obj.name]){
-                     json[obj.name]=[obj.value]
-                  }else{
-                     if (obj.checked){
-                        json[obj.name].push(obj.value)
-                     }else{
-                        json[obj.name].splice(json[obj.name].indexOf(obj.value),1)
-                     }
-                  }             
-               }
-               else{
-                  json[obj.name]=obj.value
-               }
-            }
-            
+   function montarReq(obj , checkbox){
 
+        if(checkbox){ 
+           if (!json[obj.name]){
+              json[obj.name]=[obj.value]
+           }else{
+              if (obj.checked){
+                 json[obj.name].push(obj.value)
+              }else{
+                 json[obj.name].splice(json[obj.name].indexOf(obj.value),1)
+              }
+           }             
+        }
+        else{
+           json[obj.name]=obj.value
+        }
+     }
 
+  function jsonSend(){
 
-          function jsonSend(){
-          var xhr = new XMLHttpRequest();
-               var url = "http://localhost:3000/bubu?json="+JSON.stringify(json)
-               xhr.open("POST", url, false) 
-               xhr.send();
-               alert("Respostas salvas!")
-               //window.location.href='http://localhost:3000/'
-          }
-  
-  </script>
+     if(verificaPreenchimmento(json)){
+     var xhr = new XMLHttpRequest();
+           var url = 'http://'+window.location.host+"/cadastrar?json="+JSON.stringify(json)
+           xhr.open("POST", url, false) 
+           xhr.send();
+           alert("Respostas salvas!")
+        }else{
+           alert("O formulário não está completamente preenchido. Por favor insira as informações faltantes.")
+        }
+     }
+
+</script>
   
  </head>
  <body> 
@@ -375,14 +383,14 @@
       <input type="email" name="email" class="form-control" placeholder="Ex:ricardomarques@gmail.com" value="" onchange="montarReq(this,false)" />
      </div>
 
-
      <form method="post" id="form" action="/bubu" value="{}">
-        <div class="form-group" text-align="center">
-            <input type="hidden" id="req">
+      <div class="form-group" text-align="center">
+
             <input type="button" name="submeter" class="btn btn-info"  value="Submeter" onclick="jsonSend()" />
-        </div>
-     </form>
-     
+            <input type="button" name="mapa" class="btn btn-info"  value="Mapa" onclick="window.location.href='/ocorrencias'" />
+
+         </div>
+      </form>
    </div>
   </div>
  </body>
