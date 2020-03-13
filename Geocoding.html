@@ -6,21 +6,35 @@
   <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
   <meta charset="utf-8">
   <style>
-
     #map {
       height: 100%;
     }
+
     html,
     body {
       height: 100%;
-      margin: 0;
-      padding: 0;
+      padding-top: 1em;
+    }
+
+    .container {
+      left: 10px;
+      max-width: 95%;
+      height: 30em;
+      border: 2px solid #000000;
+      padding: 2px;
+      margin: auto;
     }
   </style>
 </head>
 
 <body>
-  <div id="map"></div>
+  <div class='container'>
+    <div id="map"></div>
+  </div>
+  <div>
+    </br>
+    <input style="margin-left: 45%;" text-align="center" value="Home" background-color="blue" type="button" />
+  </div>
   <script>
     function Geocoding(map, locations) {
 
@@ -47,7 +61,7 @@
     function initMap() {
 
       var xhr = new XMLHttpRequest();
-      var url = 'http://'+window.location.host+'/ocorrencias/data'
+      var url = 'http://' + window.location.host + '/ocorrencias/data'
       xhr.open("GET", url, true)
       xhr.onload = function (e) {
         var enderecos = JSON.parse(xhr.response).data
