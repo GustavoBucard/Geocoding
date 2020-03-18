@@ -44,13 +44,49 @@
     function initMap() {
       var map = new google.maps.Map(
         document.getElementById("map"), {
-        center: new google.maps.LatLng(-22.8576, -43.2004),
-        zoom: 10,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
+          center: new google.maps.LatLng(-22.8576, -43.2004),
+          zoom: 10,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
       var coordinates = [{}];
       var geocoder = new google.maps.Geocoder();
       var bounds = new google.maps.LatLngBounds();
+
+      function getEnderecos() {
+        return new Promise(function (resolve, reject) {
+
+          var xhr = new XMLHttpRequest();
+          var url = 'http://' + window.location.host + '/ocorrencias/data'
+          xhr.open("GET", url, true)
+          xhr.onload = function (e) {
+            var enderecos = JSON.parse(xhr.response).data
+            resolve(enderecos)
+
+          }
+          xhr.send();
+        })
+      }
+
+      function getLocations(enderecos) {
+        var endereco_promises = []
+        enderecos.forEach(e => {
+          endereco_promises.push(new Promise(function (resolve, reject) {
+            geocoder.geocode({
+              'address': e
+            }, function (results, status) {
+              if (status === 'OK') {
+                // console.log(results[0].geometry.location.lat());
+                var result = new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng())
+                resolve(result)
+              } else {
+                reject(new Error('Couldnt\'t find the location ' + e));
+              }
+            })
+          }))
+        })
+
+        return endereco_promises
+      }
 
       function findLatLang(address, geocoder, mainMap) {
         return new Promise(function (resolve, reject) {
@@ -78,29 +114,22 @@
 
       var locations = getPoints(geocoder, map)
 
-      Promise.all(locations)
-        .then(function (returnVals) {
-          var location = []
-          var x = 0
-          // you should have return values here when
-          // all promises have rsolved
-          //console.log(returnVals);
-          coordinates = returnVals;
-          returnVals.forEach(function (latLng) {
-            console.log(latLng[0], latLng[1])
-            location[x] = new google.maps.LatLng(latLng[0], latLng[1])
-            console.log(latLng);
-            x++
-          })
-          var heatmap = new google.maps.visualization.HeatmapLayer({
-            data: location,
-            radius: 50,
-            opacity: 0.4
-          });
-          console.log(location)
+      var teste = getEnderecos()
 
-          heatmap.setMap(map);
-        })
+      teste.then(function (enderecos) {
+        var locations = getLocations(enderecos)
+        Promise.all(locations)
+          .then(function (returnVals) {
+            var heatmap = new google.maps.visualization.HeatmapLayer({
+              data: returnVals,
+              radius: 50,
+              opacity: 0.4
+            });
+
+            heatmap.setMap(map);
+          })
+      })
+
     }
 
   </script>
