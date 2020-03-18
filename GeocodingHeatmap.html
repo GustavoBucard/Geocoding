@@ -41,6 +41,23 @@
     var map;
     var addressData = [{ location: "Ilha do Fundão, Rio de Janeiro" }, { location: "Gogó da Ema, Rio de Janeiro" }, { location: "Morro dos Macacos, Rio de Janeiro" }];
 
+    var gradient = [
+    'rgba(0, 0, 255, 0)',
+    'rgba(0, 255, 255, 1)',
+    'rgba(0, 191, 255, 1)',
+    'rgba(0, 127, 255, 1)',
+    'rgba(0, 63, 255, 1)',
+    'rgba(0, 0, 255, 1)',
+    'rgba(0, 0, 223, 1)',
+    'rgba(0, 0, 191, 1)',
+    'rgba(0, 0, 159, 1)',
+    'rgba(0, 0, 127, 1)',
+    'rgba(0, 63, 91, 1)',
+    'rgba(0, 127, 63, 1)',
+    'rgba(0, 191, 31, 1)',
+    'rgba(0, 255, 0, 1)'
+  ]
+
     function initMap() {
       var map = new google.maps.Map(
         document.getElementById("map"), {
@@ -96,7 +113,8 @@
             var heatmap = new google.maps.visualization.HeatmapLayer({
               data: points,
               radius: 50,
-              opacity: 0.4
+              opacity: 0.4,
+              gradient: gradient
             });
 
             heatmap.setMap(map);
