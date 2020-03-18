@@ -88,38 +88,13 @@
         return endereco_promises
       }
 
-      function findLatLang(address, geocoder, mainMap) {
-        return new Promise(function (resolve, reject) {
-          geocoder.geocode({
-            'address': address
-          }, function (results, status) {
-            if (status === 'OK') {
-              //console.log(results);
-              resolve([results[0].geometry.location.lat(), results[0].geometry.location.lng()]);
-            } else {
-              reject(new Error('Couldnt\'t find the location ' + address));
-            }
-          })
-        })
-      }
-
-      function getPoints(geocoder, map) {
-        let locationData = [];
-        let latValue;
-        for (let i = 0; i < addressData.length; i++) {
-          locationData.push(findLatLang(addressData[i].location, geocoder, map))
-        }
-        return locationData // array of promises
-      }
-
-      var teste = getEnderecos()
-
-      teste.then(function (enderecos) {
+      getEnderecos()
+      .then(function (enderecos) {
         var locations = getLocations(enderecos)
         Promise.all(locations)
-          .then(function (returnVals) {
+          .then(function (points) {
             var heatmap = new google.maps.visualization.HeatmapLayer({
-              data: returnVals,
+              data: points,
               radius: 50,
               opacity: 0.4
             });
