@@ -41,5 +41,5 @@ app.get('/ocorrencias/data', function (req, res) {
   });
   
   app.get('/ocorrencias', function (req, res) {
-    res.sendFile(__dirname + '/Geocoding.html')
+    res.sendFile(__dirname + '/GeocodingHeatmap.html')
   })
