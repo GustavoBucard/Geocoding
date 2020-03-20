@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Teste Mapa</title>
+    <title>Mapa</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
     <link src="https://ajax.googleapis.com/ajax/libs/jqueremaily/3.1.0/jquery.min.js">
@@ -19,60 +19,80 @@
         html,
         body {
           height: 100%;
-          padding-top: 1em;
+          padding-top: 0.0625em;
         }
     
         .container {
-          left: 10px;
+          left: 0.625em;
           max-width: 95%;
-          height: 30em;
-          border: 2px solid #000000;
-          padding: 2px;
+          height: 35em;
+          border: 0.125em solid #000000;
+          padding: 0.125em;
           margin: auto;
+        }
+
+        .grpbotao button{
+            cursor: pointer; 
+            justify-content: center; 
+            margin-left:5em; 
+            width: 10em;
+
         }
       </style>
 </head>
 
 <body>
-    <div style="align-content: center; height: 15%;">
+    <div style="align-content: center;">
         <label style="margin-right: 45%;">
             <img src="/logoufrj" />
         </label>
         <label>
             <img src="/logocorona" />
         </label>
+        <h2 style="color: black; text-align: center;"><b>Mapeamento de ocorrências do Novo Coronavírus (2019-nCoV) no estado do Rio de Janeiro</b></h2> 
+
     </div>
 
 
-    <div style="background-image: linear-gradient(to bottom right, #A6AFBF, #dce8fe, #A6AFBF); height: 75%">
+    <div style="background-image: linear-gradient(to bottom right, #A6AFBF, #dce8fe, #A6AFBF);">
+        <br>
+        <h4 style="color: black;font-weight:bold;margin-left: 3em;">
+            Legenda:   
+            <span style="color: black">Óbito</span>        
+            <span style="color: green">Cura</span> 
+            <span style="color: red">Sintomático</span>   
+            <span style="color: blue">Ignorado</span>
+        </h4>
+        <div class="container">
+             <div id="map"></div><br>
+                <div class="grpbotao">
+                    <button class="btn btn-info" onclick="Obito()">Óbito</button>
+                    <button class="btn btn-info" onclick="Cura()">Cura</button>    
+                    <button class="btn btn-info" onclick="Sintomatico()">Sintomático</button>
+                    <button class="btn btn-info" onclick="Ignorado()">Ignorado</button>
+                    <button class="btn btn-info" onclick="Restart()">Reiniciar</button>
+                </div>
+        </div> 
+        <br>
+        <br>
+        <br>  
+        <br>
+        
 
-        <div id="map"></div>
-        <div>
-            </br>
-            <button onclick="Cura()">Cura</button>
-            <button onclick="Sintomatico()">Sintomático</button>
-            <button onclick="Obito()">Óbito</button>
-            <button onclick="Ignorado()">Ignorado </button>
-            <button onclick="obtemResultadoPorSituacao('todos')">Restart </button>
-
-            </br>
-            </br>
-            <button onclick="window.location.href='/'"
-                style="display: flex; justify-content: center; margin: 0 auto; width: 144px;" name="voltar"
-                class="btn btn-info" value="voltar">Pagina Inicial</button>
-        </div>
+        <button onclick="window.location.href='/'" style="display: flex; justify-content: center; margin-left: 40em; width: 10em;" name="voltar" class="btn btn-info" value="voltar">Página Inicial</button>
+    <br>
     </div>
-
-
-    <footer style="color: grey; font-size: medium; margin-left: 3%;">
-        Desenvolvido por:
-        <img src="/logolab" style="margin-left:1%; width: 5%;" />
-    </footer>
+    <br/>
+       <div style="color: grey; font-size: medium; margin-left: 3%;"><b>
+            Desenvolvido por:
+            </b><img src="/logolab" style="margin-left:1%; width: 5%;" />
+       </div>
+       <br/>
 
 
     <script>
 
-        /*var gradientOriginal = [
+               /*var gradientOriginal = [
           "rgba(102, 255, 0, 0)",
           "rgba(102, 255, 0, 1)",
           "rgba(147, 255, 0, 1)",

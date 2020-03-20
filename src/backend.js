@@ -39,27 +39,17 @@ const dbUrl = 'mongodb://localhost/ufrj'
         })
 
     //serviço de dados
-    /**
-     * situações possíveis:
-     * resultado.SituacaoSaude = "Obito"
-     * resultado.SituacaoSaude = "Cura"
-     * resultado.SituacaoSaude = "Sintomatico"
-     * resultado.SituacaoSaude = "Ignorado"
-     * resultado.SituacaoSaude = "nPreenchido"
-     */
     app.get('/ocorrencias/data', function (req, res) {
-        situacao = req.query.situacao
         db.find({}, { projection: { endereco: 1, _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
             var cont
             var enderecos = []
             for (cont = 0; cont < Object.keys(result).length; cont++) {
-                console.log(result[cont].situacao)
-                if(result[cont].endereco != null && (result[cont].situacao == 'todos' || result[cont].SituacaoSaude == situacao)){
-                    enderecos.push(result[cont].endereco)
-                }
+            enderecos.push(result[cont].endereco)
             }
-            console.log(situacao)
+            enderecos = enderecos.filter(e => {
+            return e != null
+            })
             res.json({ data: enderecos });
         });
     });
