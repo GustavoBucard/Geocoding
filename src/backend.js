@@ -47,7 +47,7 @@ const dbUrl = 'mongodb://localhost/ufrj'
      * resultado.SituacaoSaude = "Ignorado"
      * resultado.SituacaoSaude = "nPreenchido"
      */
-    app.get('/ocorrencias/data', function (req, res) {
+    /*app.get('/ocorrencias/data', function (req, res) {
         situacao = req.query.situacao
         db.find({}, { projection: { endereco: 1, _id: 0 } }).toArray(function (err, result) {
             if (err) throw err;
@@ -55,14 +55,38 @@ const dbUrl = 'mongodb://localhost/ufrj'
             var enderecos = []
             for (cont = 0; cont < Object.keys(result).length; cont++) {
                 console.log(result[cont].situacao)
-                if(result[cont].endereco != null && (result[cont].situacao == 'todos' || result[cont].SituacaoSaude == situacao)){
+                // if(result[cont].endereco != null && (result[cont].situacao == 'todos' || result[cont].SituacaoSaude == situacao)){
+                if(result[cont].endereco != null && (situacao == 'todos' || result[cont].SituacaoSaude == situacao)){
                     enderecos.push(result[cont].endereco)
                 }
             }
             console.log(situacao)
             res.json({ data: enderecos });
         });
+    });*/
+    //versao gmoc 20-03
+    app.get('/ocorrencias/data', function (req, res) {
+        situacao = req.query.situacao
+        //console.log(req.query.situacao)
+        db.find({}, { coords: 1, _id: 0 } ).toArray(function (err, result) {
+            //console.log("end  "+ JSON.stringify(result[1]))
+            if (err) throw err;
+            var cont
+            var data={}
+            for (cont = 0; cont < Object.keys(result).length; cont++) {
+                if(result[cont].coords != null  && (result[cont].coords != "nPreenchido" && result[cont].SituacaoSaude != "nPreenchido") && (situacao == 'todos' || result[cont].SituacaoSaude == situacao)){
+                     if (!data[result[cont].SituacaoSaude]){
+                        data[result[cont].SituacaoSaude]=[result[cont].coords]                  
+                    }
+                    else if (data[result[cont].SituacaoSaude]){
+                        data[result[cont].SituacaoSaude].push(result[cont].coords)                
+                    }
+                }
+            }
+            res.json({ data });
+        });
     });
+
 
     app.post('/cadastrar', function (req, res) {
         obj = req.query.json
