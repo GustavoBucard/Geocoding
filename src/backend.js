@@ -3,12 +3,23 @@ const app = express();
 const bodyParser = require('body-parser')
 const urlencodedParser = bodyParser.urlencoded({ extended: true })
 
+const NodeGeocoder = require('node-geocoder');
+
+const options = {
+  provider: 'google',
+   // Optional depending on the providers
+  httpAdapter: 'https', // Default
+  apiKey: 'AIzaSyBy5sPPL58np_vCYP9laO4QbJdH3WT71tc', // for Mapquest, OpenCage, Google Premier
+  formatter: null         // 'gpx', 'string', ...
+};
+const geocoder = NodeGeocoder(options);
+
 //conectando o banco
 const mongo = require('mongodb').MongoClient
 const dbUrl = 'mongodb://localhost/ufrj'
     mongo.connect(dbUrl, function (err, client) {
     if (err) return console.log(err)
-    db = client.db('ufrj').collection("covid19")
+    db = client.db('ufrj').collection("covid19_test")
 
     app.listen(3000, function () {
         console.log('Escutando porta 3000:');''
@@ -89,10 +100,27 @@ const dbUrl = 'mongodb://localhost/ufrj'
 
 
     app.post('/cadastrar', function (req, res) {
-        obj = req.query.json
-        obj = JSON.parse(obj.toString())
-        db.insertOne(obj)
-        res.send('200')
+        try {
+           var obj = req.query.json
+            obj = JSON.parse(obj.toString())
+            obj['coords']="nPreenchido"
+            //pegando coords
+            geocoder.geocode(obj.endereco)
+                        .then(function(geo) {
+                                    obj['coords']=[geo[0].latitude,geo[0].longitude]
+                                    console.log(obj)
+                                    db.insertOne(obj)
+                                    res.send("200")
+                            })
+                    
+           
+            //console.log("aqui")
+            //res.redirect("/")
+          }
+          catch(err) {
+            res.send('401')
+            //console.log("acola")
+          }
         })
 
-  
+
